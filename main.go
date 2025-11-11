@@ -47,12 +47,14 @@ func squareHandler(w http.ResponseWriter, r *http.Request) {
 
     num := r.URL.Query().Get("num")
     if num == "" {
-        http.Error(w, "QueryError", http.StatusNotFound)
-        return
+		// If there is an error in decoding, return an error response
+		http.Error(w, "Failed to decode JSON", http.StatusBadRequest)
+		return
     }
 	intNum, err := strconv.Atoi(num)
 	if err != nil {
-        http.Error(w, "QueryError", http.StatusNotFound)
+		// If there is an error in decoding, return an error response
+		http.Error(w, "Failed to decode JSON", http.StatusBadRequest)
         return
 	}
 
@@ -70,8 +72,9 @@ func echoHandler(w http.ResponseWriter, r *http.Request) {
 
     msg := r.URL.Query().Get("msg")
     if msg == "" {
-        http.Error(w, "QueryError", http.StatusNotFound)
-        return
+		// If there is an error in decoding, return an error response
+		http.Error(w, "Failed to decode JSON", http.StatusBadRequest)
+		return
     }
     msgMap := map[string]string{"echo": msg}
 
