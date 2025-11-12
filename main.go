@@ -17,6 +17,13 @@ type inputNums struct {
     Var2 int `json:"b"`
 }
 
+func withLogging(handler http.HandlerFunc) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        log.Printf("%s %s", r.Method, r.URL.Path)
+        handler(w, r)
+    }
+}
+
 func addHandler(w http.ResponseWriter, r *http.Request) {
     if r.Method != http.MethodPost {
         http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -132,13 +139,13 @@ func timeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    http.HandleFunc("/welcome", welcomeHandler)
-    http.HandleFunc("/status", statusOkHandler)
-    http.HandleFunc("/hello", helloHandler)
-    http.HandleFunc("/time", timeHandler)
-    http.HandleFunc("/echo", echoHandler)
-    http.HandleFunc("/square", squareHandler)
-    http.HandleFunc("/add", addHandler)
+    http.HandleFunc("/welcome", withLogging(welcomeHandler))
+    http.HandleFunc("/status", withLogging(statusOkHandler))
+    http.HandleFunc("/hello", withLogging(helloHandler))
+    http.HandleFunc("/time", withLogging(timeHandler))
+    http.HandleFunc("/echo", withLogging(echoHandler))
+    http.HandleFunc("/square", withLogging(squareHandler))
+    http.HandleFunc("/add", withLogging(addHandler))
     log.Println("Server started on :8080")
     http.ListenAndServe(":8080", nil)
 }

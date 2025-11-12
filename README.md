@@ -17,3 +17,8 @@ Create /add endpoint (POST)
 Accept JSON: { "a": 5, "b": 10 }
 
 Respond: { "sum": 15 }
+
+Level 4: Error handling
+
+Level 5: logging
+
